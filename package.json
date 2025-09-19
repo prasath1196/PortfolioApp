@@ -1,5 +1,4 @@
 {
-<<<<<<< HEAD
   "name": "personalportfolio",
   "private": true,
   "version": "0.0.0",
@@ -52,20 +51,5 @@
     "typescript-eslint": "^8.35.1",
     "vite": "^7.0.4",
     "vitest": "^3.2.4"
-=======
-  "name": "parcel",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "start": "parcel index.html",
-    "build": "parcel build index.html",
-    "test": "jest"
-  },
-  "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "parcel": "^2.12.0"
->>>>>>> origin/main
   }
 }
