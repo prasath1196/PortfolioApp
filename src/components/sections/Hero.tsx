@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import professionalPhoto from '../../assets/images/professional_photo.jpg';
 
 interface HeroProps {
   className?: string;
@@ -62,7 +63,7 @@ const Hero: React.FC<HeroProps> = ({ className = '' }) => {
           <div className="relative">
             <div className="w-48 h-48 md:w-64 md:h-64 glass-crystal p-2 hero-photo-glow hero-photo-crop">
               <img
-                src="/src/assets/images/professional_photo.jpg"
+                src={professionalPhoto}
                 alt="Professional headshot"
                 loading="eager"
                 fetchPriority="high"
