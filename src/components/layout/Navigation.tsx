@@ -4,6 +4,7 @@ interface NavigationItem {
   id: string;
   label: string;
   href: string;
+  isExternal?: boolean;
 }
 
 interface NavigationProps {
@@ -15,6 +16,7 @@ const navigationItems: NavigationItem[] = [
   { id: 'resume', label: 'Resume', href: '#resume' },
   { id: 'projects', label: 'Projects', href: '#projects' },
   { id: 'testimonials', label: 'Testimonials', href: '#testimonials' },
+  { id: 'blog', label: 'Blog', href: 'https://theboringbatman.substack.com/', isExternal: true },
   { id: 'contact', label: 'Contact', href: '#contact' },
 ];
 
@@ -27,6 +29,11 @@ const Navigation: React.FC<NavigationProps> = ({ className = '' }) => {
     e: React.MouseEvent<HTMLAnchorElement> | React.KeyboardEvent<HTMLAnchorElement>, 
     href: string
   ) => {
+    if (!href.startsWith('#')) {
+      setIsMobileMenuOpen(false);
+      return;
+    }
+
     e.preventDefault();
     const targetId = href.replace('#', '');
     const targetElement = document.getElementById(targetId);
@@ -87,6 +94,8 @@ const Navigation: React.FC<NavigationProps> = ({ className = '' }) => {
                 href={item.href}
                 onClick={(e) => handleSmoothScroll(e, item.href)}
                 onKeyDown={(e) => handleKeyDown(e, item.href)}
+                target={item.isExternal ? '_blank' : undefined}
+                rel={item.isExternal ? 'noopener noreferrer' : undefined}
                 className={`
                   px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300
                   hover:bg-white/10 hover:backdrop-blur-sm
@@ -170,6 +179,8 @@ const Navigation: React.FC<NavigationProps> = ({ className = '' }) => {
                         href={item.href}
                         onClick={(e) => handleSmoothScroll(e, item.href)}
                         onKeyDown={(e) => handleKeyDown(e, item.href)}
+                        target={item.isExternal ? '_blank' : undefined}
+                        rel={item.isExternal ? 'noopener noreferrer' : undefined}
                         className={`
                           px-4 py-3 rounded-lg text-base font-medium transition-all duration-300
                           hover:bg-white/10 hover:scale-105
