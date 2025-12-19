@@ -511,8 +511,7 @@ export default async function Home() {
           <FadeIn delay={0.5}>
             <footer className="pt-24 pb-8 text-sm text-zinc-600 font-mono">
               <p>
-                Built with Next.js, MongoDB & Tailwind. <br />
-                Deployed on Vercel.
+                Reach out to me at <a href={`mailto:${profile.socials.email}`}>{profile.socials.email}</a>
               </p>
             </footer>
           </FadeIn>
