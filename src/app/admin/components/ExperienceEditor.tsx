@@ -61,7 +61,7 @@ export default function ExperienceEditor({ experience, onChange }: { experience:
 
     const removeBullet = (index: number) => {
         if (!selectedJob) return;
-        const newDesc = selectedJob.description.filter((_, i) => i !== index);
+        const newDesc = selectedJob.description.filter((_: any, i: number) => i !== index);
         updateJob(selectedJob.id, 'description', newDesc);
     };
 
