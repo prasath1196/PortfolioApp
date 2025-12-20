@@ -35,6 +35,12 @@ export default function SectionOrderEditor({ sections, onChange }: SectionOrderE
         onChange(newSections);
     };
 
+    const updateTitle = (index: number, newTitle: string) => {
+        const newSections = [...sections];
+        newSections[index] = { ...newSections[index], title: newTitle };
+        onChange(newSections);
+    };
+
     return (
         <div className="max-w-2xl mx-auto">
             <h2 className="text-xl font-bold text-white mb-6">Reorder Sections</h2>
@@ -54,7 +60,11 @@ export default function SectionOrderEditor({ sections, onChange }: SectionOrderE
                                 {index + 1}
                             </div>
                             <div>
-                                <h3 className={`font-medium capitalize ${section.visible === false ? 'text-zinc-500' : 'text-white'}`}>{section.title || section.id}</h3>
+                                <input
+                                    className={`font-medium capitalize bg-transparent border-b border-transparent focus:border-emerald-500 outline-none w-32 ${section.visible === false ? 'text-zinc-500' : 'text-white'}`}
+                                    value={section.title || section.id}
+                                    onChange={(e) => updateTitle(index, e.target.value)}
+                                />
                                 <p className="text-xs text-zinc-500 uppercase tracking-wider">{section.type}</p>
                             </div>
                         </div>

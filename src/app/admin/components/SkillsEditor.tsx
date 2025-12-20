@@ -7,7 +7,7 @@ interface SkillGroup {
     skills: string[];
 }
 
-export default function SkillsEditor({ skills, onChange }: { skills: SkillGroup[], onChange: (s: SkillGroup[]) => void }) {
+export default function SkillsEditor({ skills, snapshotTitle, onChange, onSnapshotTitleChange }: { skills: SkillGroup[], snapshotTitle: string, onChange: (s: SkillGroup[]) => void, onSnapshotTitleChange: (t: string) => void }) {
     const [selectedIndex, setSelectedIndex] = useState<number | null>(skills.length > 0 ? 0 : null);
 
     const selectedGroup = selectedIndex !== null ? skills[selectedIndex] : null;
@@ -37,6 +37,16 @@ export default function SkillsEditor({ skills, onChange }: { skills: SkillGroup[
                 <div className="flex justify-between items-center mb-4">
                     <h3 className="text-sm font-bold text-zinc-400 uppercase tracking-wider">Skill Categories</h3>
                     <button onClick={addGroup} className="p-1 hover:bg-emerald-500/20 text-emerald-400 rounded"><Plus size={16} /></button>
+                </div>
+
+                <div className="mb-6">
+                    <label className="block text-[10px] font-medium text-zinc-500 mb-1 uppercase tracking-wider">Sidebar Title</label>
+                    <input
+                        className="w-full bg-zinc-900 border border-zinc-800 rounded p-2 text-xs text-white focus:border-emerald-500 outline-none"
+                        value={snapshotTitle}
+                        onChange={(e) => onSnapshotTitleChange(e.target.value)}
+                        placeholder="Skills Snapshot"
+                    />
                 </div>
                 <div className="flex-1 overflow-y-auto space-y-2">
                     {skills.map((group, idx) => (

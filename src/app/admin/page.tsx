@@ -88,6 +88,16 @@ export default function AdminPage() {
                     });
                 }
 
+                if (jsonData.sections) {
+                    const projectsSection = jsonData.sections.find((s: any) => s.id === 'projects');
+                    if (projectsSection) {
+                        if (!projectsSection.data) projectsSection.data = {};
+                        if (!projectsSection.data.categories) {
+                            projectsSection.data.categories = ['work', 'personal', 'freelance', 'open source'];
+                        }
+                    }
+                }
+
                 setData(jsonData);
                 setContent(JSON.stringify(jsonData, null, 2));
             }
@@ -165,6 +175,28 @@ export default function AdminPage() {
         setContent(JSON.stringify(newData, null, 2));
     };
 
+    const updateSectionCategories = (sectionId: string, newCategories: string[]) => {
+        const newData = {
+            ...data,
+            sections: data.sections.map((s: any) =>
+                s.id === sectionId ? { ...s, data: { ...s.data, categories: newCategories } } : s
+            )
+        };
+        setData(newData);
+        setContent(JSON.stringify(newData, null, 2));
+    };
+
+    const updateSectionField = (sectionId: string, field: string, value: any) => {
+        const newData = {
+            ...data,
+            sections: data.sections.map((s: any) =>
+                s.id === sectionId ? { ...s, data: { ...s.data, [field]: value } } : s
+            )
+        };
+        setData(newData);
+        setContent(JSON.stringify(newData, null, 2));
+    };
+
     const handleSectionsOrderChange = (newSections: any[]) => {
         const newData = { ...data, sections: newSections };
         setData(newData);
@@ -235,12 +267,37 @@ export default function AdminPage() {
             <main className="flex-1 overflow-hidden relative">
                 <div className="absolute inset-0 p-6 overflow-y-auto">
                     {activeTab === 'sections' && <SectionOrderEditor sections={data.sections} onChange={handleSectionsOrderChange} />}
-                    {activeTab === 'projects' && <ProjectsEditor projects={getItems('projects')} onChange={(items) => updateSectionData('projects', items)} />}
+                    {activeTab === 'projects' && (
+                        <ProjectsEditor
+                            projects={getItems('projects')}
+                            categories={data.sections.find((s: any) => s.id === 'projects')?.data?.categories || []}
+                            sectionTitle={data.sections.find((s: any) => s.id === 'projects')?.data?.sectionTitle ?? 'AI & Engineering'}
+                            sectionSubtitle={data.sections.find((s: any) => s.id === 'projects')?.data?.sectionSubtitle ?? "A collection of AI-native applications, full-stack systems, and experiments I've built."}
+                            onChange={(items) => updateSectionData('projects', items)}
+                            onCategoriesChange={(cats) => updateSectionCategories('projects', cats)}
+                            onSectionTitleChange={(t) => updateSectionField('projects', 'sectionTitle', t)}
+                            onSectionSubtitleChange={(t) => updateSectionField('projects', 'sectionSubtitle', t)}
+                        />
+                    )}
                     {activeTab === 'profile' && <ProfileEditor data={data} onChange={handleDataChange} />}
                     {activeTab === 'experience' && <ExperienceEditor experience={getItems('experience')} onChange={(items) => updateSectionData('experience', items)} />}
-                    {activeTab === 'skills' && <SkillsEditor skills={getItems('skills')} onChange={(items) => updateSectionData('skills', items)} />}
+                    {activeTab === 'skills' && (
+                        <SkillsEditor
+                            skills={getItems('skills')}
+                            snapshotTitle={data.sections.find((s: any) => s.id === 'skills')?.data?.snapshotTitle ?? 'Skills Snapshot'}
+                            onChange={(items) => updateSectionData('skills', items)}
+                            onSnapshotTitleChange={(t) => updateSectionField('skills', 'snapshotTitle', t)}
+                        />
+                    )}
                     {activeTab === 'learning' && <NowLearningEditor items={getItems('learning')} onChange={(items) => updateSectionData('learning', items)} />}
-                    {activeTab === 'certifications' && <CertificationsEditor items={getItems('certifications')} onChange={(items) => updateSectionData('certifications', items)} />}
+                    {activeTab === 'certifications' && (
+                        <CertificationsEditor
+                            items={getItems('certifications')}
+                            snapshotTitle={data.sections.find((s: any) => s.id === 'certifications')?.data?.snapshotTitle ?? 'Latest Certs'}
+                            onChange={(items) => updateSectionData('certifications', items)}
+                            onSnapshotTitleChange={(t) => updateSectionField('certifications', 'snapshotTitle', t)}
+                        />
+                    )}
                     {activeTab === 'recommendations' && <RecommendationsEditor items={getItems('recommendations')} onChange={(items) => updateSectionData('recommendations', items)} />}
                     {activeTab === 'education' && <EducationEditor education={getItems('education')} onChange={(items) => updateSectionData('education', items)} />}
 

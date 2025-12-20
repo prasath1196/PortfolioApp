@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { Plus, Trash2, MoveUp, MoveDown, Eye, EyeOff } from 'lucide-react';
 
-export default function ProjectsEditor({ projects, onChange }: { projects: any[], onChange: (p: any[]) => void }) {
+export default function ProjectsEditor({ projects, categories, sectionTitle, sectionSubtitle, onChange, onCategoriesChange, onSectionTitleChange, onSectionSubtitleChange }: { projects: any[], categories: string[], sectionTitle: string, sectionSubtitle: string, onChange: (p: any[]) => void, onCategoriesChange: (c: string[]) => void, onSectionTitleChange: (t: string) => void, onSectionSubtitleChange: (t: string) => void }) {
     const [selectedId, setSelectedId] = useState<string | null>(projects[0]?.id || null);
 
     const selectedProject = projects.find(p => p.id === selectedId);
@@ -57,6 +57,76 @@ export default function ProjectsEditor({ projects, onChange }: { projects: any[]
                     <h3 className="text-sm font-bold text-zinc-400 uppercase tracking-wider">Projects</h3>
                     <button onClick={addProject} className="p-1 hover:bg-emerald-500/20 text-emerald-400 rounded"><Plus size={16} /></button>
                 </div>
+
+                <div className="mb-6 pb-6 border-b border-zinc-800">
+                    <label className="block text-[10px] font-medium text-zinc-500 mb-1 uppercase tracking-wider">Main Heading</label>
+                    <input
+                        className="w-full bg-zinc-900 border border-zinc-800 rounded p-2 text-xs text-white focus:border-emerald-500 outline-none mb-4"
+                        value={sectionTitle}
+                        onChange={(e) => onSectionTitleChange(e.target.value)}
+                        placeholder="AI & Engineering"
+                    />
+
+                    <label className="block text-[10px] font-medium text-zinc-500 mb-1 uppercase tracking-wider">Subheading</label>
+                    <textarea
+                        className="w-full bg-zinc-900 border border-zinc-800 rounded p-2 text-xs text-white focus:border-emerald-500 outline-none h-16"
+                        value={sectionSubtitle}
+                        onChange={(e) => onSectionSubtitleChange(e.target.value)}
+                        placeholder="A collection of..."
+                    />
+                </div>
+
+                {/* Category Management - Simple Inline for now */}
+                <div className="mb-6 pb-6 border-b border-zinc-800">
+                    <h3 className="text-xs font-bold text-zinc-500 uppercase tracking-wider mb-2">Categories</h3>
+                    <div className="flex flex-wrap gap-2 mb-2">
+                        {categories.map(cat => (
+                            <span key={cat} className="group inline-flex items-center gap-1 text-[10px] bg-zinc-900 border border-zinc-800 px-2 py-1 rounded text-zinc-400">
+                                {cat}
+                                <button
+                                    onClick={() => {
+                                        if (confirm(`Delete category "${cat}"? Projects will keep the tag but it won't be selectable.`)) {
+                                            onCategoriesChange(categories.filter(c => c !== cat));
+                                        }
+                                    }}
+                                    className="hover:text-red-400 transition-colors"
+                                >
+                                    <Trash2 size={10} />
+                                </button>
+                            </span>
+                        ))}
+                    </div>
+                    <div className="flex gap-2">
+                        <input
+                            id="new-category"
+                            placeholder="New Cat..."
+                            className="flex-1 bg-zinc-900 border border-zinc-800 rounded px-2 py-1 text-xs text-white outline-none focus:border-emerald-500"
+                            onKeyDown={(e) => {
+                                if (e.key === 'Enter') {
+                                    const val = e.currentTarget.value.trim();
+                                    if (val && !categories.includes(val)) {
+                                        onCategoriesChange([...categories, val]);
+                                        e.currentTarget.value = '';
+                                    }
+                                }
+                            }}
+                        />
+                        <button
+                            onClick={() => {
+                                const input = document.getElementById('new-category') as HTMLInputElement;
+                                const val = input.value.trim();
+                                if (val && !categories.includes(val)) {
+                                    onCategoriesChange([...categories, val]);
+                                    input.value = '';
+                                }
+                            }}
+                            className="bg-zinc-800 hover:bg-zinc-700 text-zinc-400 p-1 rounded"
+                        >
+                            <Plus size={12} />
+                        </button>
+                    </div>
+                </div>
+
                 <div className="flex-1 overflow-y-auto space-y-2">
                     {projects.map((p, index) => (
                         <div
@@ -129,10 +199,9 @@ export default function ProjectsEditor({ projects, onChange }: { projects: any[]
                                     value={selectedProject.category}
                                     onChange={(e) => updateProject(selectedProject.id, 'category', e.target.value)}
                                 >
-                                    <option value="work">Work (Case Study)</option>
-                                    <option value="personal">Personal (Now Building)</option>
-                                    <option value="freelance">Freelance</option>
-                                    <option value="open-source">Open Source</option>
+                                    {categories.map(cat => (
+                                        <option key={cat} value={cat}>{cat}</option>
+                                    ))}
                                 </select>
                             </div>
                             <div>

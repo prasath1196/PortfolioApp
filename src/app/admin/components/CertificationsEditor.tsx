@@ -12,7 +12,7 @@ interface CertificationItem {
     visible?: boolean;
 }
 
-export default function CertificationsEditor({ items, onChange }: { items: CertificationItem[], onChange: (items: CertificationItem[]) => void }) {
+export default function CertificationsEditor({ items, snapshotTitle, onChange, onSnapshotTitleChange }: { items: CertificationItem[], snapshotTitle: string, onChange: (items: CertificationItem[]) => void, onSnapshotTitleChange: (t: string) => void }) {
     const [selectedId, setSelectedId] = useState<string | null>(items[0]?.id || null);
 
     const selectedItem = items.find(i => i.id === selectedId);
@@ -51,6 +51,16 @@ export default function CertificationsEditor({ items, onChange }: { items: Certi
                 <div className="flex justify-between items-center mb-4">
                     <h3 className="text-sm font-bold text-zinc-400 uppercase tracking-wider">Certifications</h3>
                     <button onClick={addItem} className="p-1 hover:bg-emerald-500/20 text-emerald-400 rounded"><Plus size={16} /></button>
+                </div>
+
+                <div className="mb-6">
+                    <label className="block text-[10px] font-medium text-zinc-500 mb-1 uppercase tracking-wider">Sidebar Title</label>
+                    <input
+                        className="w-full bg-zinc-900 border border-zinc-800 rounded p-2 text-xs text-white focus:border-emerald-500 outline-none"
+                        value={snapshotTitle}
+                        onChange={(e) => onSnapshotTitleChange(e.target.value)}
+                        placeholder="Latest Certs"
+                    />
                 </div>
                 <div className="flex-1 overflow-y-auto space-y-2">
                     {items.map(i => (
@@ -150,6 +160,6 @@ export default function CertificationsEditor({ items, onChange }: { items: Certi
                     <div className="flex items-center justify-center h-full text-zinc-600">Select a certification</div>
                 )}
             </div>
-        </div>
+        </div >
     );
 }
