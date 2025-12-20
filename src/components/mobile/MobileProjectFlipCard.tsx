@@ -36,7 +36,7 @@ export default function MobileProjectFlipCard({ project, labels }: ProjectFlipCa
                 {/* FRONT SIDE */}
                 <div
                     className="absolute inset-0 w-full h-full backface-hidden bg-white dark:bg-zinc-900 border-none shadow-none flex flex-col"
-                    style={{ backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden' }}
+                    style={{ backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden', transform: 'translateZ(1px)' }}
                 >
                     {/* Image Area */}
                     <div className="h-2/3 w-full relative overflow-hidden bg-zinc-100 dark:bg-zinc-950">
@@ -94,7 +94,7 @@ export default function MobileProjectFlipCard({ project, labels }: ProjectFlipCa
                     onClick={(e) => {
                         // Allow parent click to handle flip back unless stopped
                     }}
-                    style={{ backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
+                    style={{ backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden', transform: 'rotateY(180deg) translateZ(1px)' }}
                 >
                     <div className="flex-none p-6 border-b border-zinc-200 dark:border-zinc-800 flex justify-between items-center bg-white dark:bg-zinc-900 sticky top-0 z-10 transition-colors">
                         <h3 className="text-lg font-bold text-zinc-900 dark:text-white truncate pr-4">{project.title}</h3>
